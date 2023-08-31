@@ -20,9 +20,15 @@ namespace AutoClicker.Models
 
         public LocationMode SelectedLocationMode { get; set; }
 
+        public LocationMode SelectedAlternatingClicks { get; set; }
+
         public int PickedXValue { get; set; }
 
         public int PickedYValue { get; set; }
+
+        public int SecondPickedXValue { get; set; }
+
+        public int SecondPickedYValue { get; set; }
 
         public int SelectedTimesToRepeat { get; set; }
     }

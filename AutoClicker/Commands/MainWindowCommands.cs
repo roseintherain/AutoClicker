@@ -31,5 +31,11 @@ namespace AutoClicker.Commands
                 typeof(MainWindowCommands),
                 nameof(CaptureMouseScreenCoordinates)
             );
+
+        public static readonly RoutedUICommand CaptureSecondMouseScreenCoordinates =
+            AssemblyUtils.CreateCommand(
+                typeof(MainWindowCommands),
+                nameof(CaptureSecondMouseScreenCoordinates)
+            );
     }
 }

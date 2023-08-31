@@ -19,8 +19,6 @@ namespace AutoClicker.Views
 
             AssemblyName assemblyInfo = AssemblyUtils.GetAssemblyInfo();
             AboutInformationText.Text = $"{assemblyInfo.Name} v{assemblyInfo.Version.Major}.{assemblyInfo.Version.Minor}.{assemblyInfo.Version.Build}";
-            UrlHyperlink.NavigateUri = AssemblyUtils.GetProjectUri();
-            UrlHyperlink.Inlines.Add(AssemblyUtils.GetProjectURL());
         }
 
         #endregion Life Cycle

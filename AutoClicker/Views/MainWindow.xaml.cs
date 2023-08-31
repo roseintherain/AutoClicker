@@ -41,6 +41,8 @@ namespace AutoClicker.Views
         private AboutWindow aboutWindow = null;
         private SettingsWindow settingsWindow = null;
         private CaptureMouseScreenCoordinatesWindow captureMouseCoordinatesWindow;
+        public bool AlternatingClicks;
+        public bool switcher;
 
         private ImageSource _defaultIcon;
         private IntPtr _mainWindowHandle;
@@ -204,21 +206,58 @@ namespace AutoClicker.Views
             ExecutedRoutedEventArgs e
         )
         {
-            if (captureMouseCoordinatesWindow == null)
+            if (AlternatingClicks == true)
             {
-                captureMouseCoordinatesWindow = new CaptureMouseScreenCoordinatesWindow();
-                captureMouseCoordinatesWindow.Closed += (o, args) => captureMouseCoordinatesWindow = null;
-                captureMouseCoordinatesWindow.OnCoordinatesCaptured += (o, point) =>
+                Log.Information("hit second command");
+                if (captureMouseCoordinatesWindow == null)
                 {
-                    TextBoxPickedXValue.Text = point.X.ToString();
-                    TextBoxPickedYValue.Text = point.Y.ToString();
-                    RadioButtonSelectedLocationMode_PickedLocation.IsChecked = true;
-                };
+                    captureMouseCoordinatesWindow = new CaptureMouseScreenCoordinatesWindow();
+                    captureMouseCoordinatesWindow.Closed += (o, args) => captureMouseCoordinatesWindow = null;
+                    captureMouseCoordinatesWindow.OnCoordinatesCaptured += (o, point) =>
+                    {
+                        TextBoxSecondPickedXValue.Text = point.X.ToString();
+                        TextBoxSecondPickedYValue.Text = point.Y.ToString();
+                        RadioButtonSelectedLocationMode_PickedLocation.IsChecked = true;
+                    };
+                }
+            } else
+            {
+                if (captureMouseCoordinatesWindow == null)
+                {
+                    captureMouseCoordinatesWindow = new CaptureMouseScreenCoordinatesWindow();
+                    captureMouseCoordinatesWindow.Closed += (o, args) => captureMouseCoordinatesWindow = null;
+                    captureMouseCoordinatesWindow.OnCoordinatesCaptured += (o, point) =>
+                    {
+                        TextBoxPickedXValue.Text = point.X.ToString();
+                        TextBoxPickedYValue.Text = point.Y.ToString();
+                        RadioButtonSelectedLocationMode_PickedLocation.IsChecked = true;
+                    };
+                }
             }
+
 
             captureMouseCoordinatesWindow.Show();
         }
+        private void CaptureSecondMouseScreenCoordinatesCommand_Execute(
+            object sender,
+            ExecutedRoutedEventArgs e
+        )
+            {
+            Log.Information("hit second command");
+                if (captureMouseCoordinatesWindow == null)
+                {
+                    captureMouseCoordinatesWindow = new CaptureMouseScreenCoordinatesWindow();
+                    captureMouseCoordinatesWindow.Closed += (o, args) => captureMouseCoordinatesWindow = null;
+                    captureMouseCoordinatesWindow.OnCoordinatesCaptured += (o, point) =>
+                    {
+                        TextBoxSecondPickedXValue.Text = point.X.ToString();
+                        TextBoxSecondPickedYValue.Text = point.Y.ToString();
+                        RadioButtonSelectedLocationMode_PickedLocation.IsChecked = true;
+                    };
+                }
 
+                captureMouseCoordinatesWindow.Show();
+        }
         #endregion Commands
 
         #region Helper Methods
@@ -252,6 +291,12 @@ namespace AutoClicker.Views
                 MouseCursor.Position : new Point(AutoClickerSettings.PickedXValue, AutoClickerSettings.PickedYValue);
         }
 
+        private Point GetSecondSelectedPosition()
+        {
+            return AutoClickerSettings.SelectedLocationMode == LocationMode.CurrentLocation ?
+             MouseCursor.Position : new Point(AutoClickerSettings.SecondPickedXValue, AutoClickerSettings.SecondPickedYValue);
+        }
+
         private int GetSelectedXPosition()
         {
             return GetSelectedPosition().X;
@@ -260,6 +305,16 @@ namespace AutoClicker.Views
         private int GetSelectedYPosition()
         {
             return GetSelectedPosition().Y;
+        }
+
+        private int GetSecondSelectedXPosition()
+        {
+            return GetSecondSelectedPosition().X;
+        }
+
+        private int GetSecondSelectedYPosition()
+        {
+            return GetSecondSelectedPosition().Y;
         }
 
         private int GetNumberOfMouseActions()
@@ -339,32 +394,87 @@ namespace AutoClicker.Views
         {
             Dispatcher.Invoke(() =>
             {
-                switch (AutoClickerSettings.SelectedMouseButton)
+                if (AlternatingClicks == true)
                 {
-                    case MouseButton.Left:
-                        PerformMouseClick(Constants.MOUSEEVENTF_LEFTDOWN, Constants.MOUSEEVENTF_LEFTUP, GetSelectedXPosition(), GetSelectedYPosition());
-                        break;
-                    case MouseButton.Right:
-                        PerformMouseClick(Constants.MOUSEEVENTF_RIGHTDOWN, Constants.MOUSEEVENTF_RIGHTUP, GetSelectedXPosition(), GetSelectedYPosition());
-                        break;
-                    case MouseButton.Middle:
-                        PerformMouseClick(Constants.MOUSEEVENTF_MIDDLEDOWN, Constants.MOUSEEVENTF_MIDDLEUP, GetSelectedXPosition(), GetSelectedYPosition());
-                        break;
+                    if (!switcher)
+                    {
+                        switch (AutoClickerSettings.SelectedMouseButton)
+                        {
+                            case MouseButton.Left:
+                                PerformMouseClick(Constants.MOUSEEVENTF_LEFTDOWN, Constants.MOUSEEVENTF_LEFTUP, GetSelectedXPosition(), GetSelectedYPosition());
+                                break;
+                            case MouseButton.Right:
+                                PerformMouseClick(Constants.MOUSEEVENTF_RIGHTDOWN, Constants.MOUSEEVENTF_RIGHTUP, GetSelectedXPosition(), GetSelectedYPosition());
+                                break;
+                            case MouseButton.Middle:
+                                PerformMouseClick(Constants.MOUSEEVENTF_MIDDLEDOWN, Constants.MOUSEEVENTF_MIDDLEUP, GetSelectedXPosition(), GetSelectedYPosition());
+                                break;
+                        }
+                        switcher = true;
+                    }
+                    else
+                    {
+                        switch (AutoClickerSettings.SelectedMouseButton)
+                        {
+                            case MouseButton.Left:
+                                PerformMouseClick(Constants.MOUSEEVENTF_LEFTDOWN, Constants.MOUSEEVENTF_LEFTUP, GetSecondSelectedXPosition(), GetSecondSelectedYPosition());
+                                break;
+                            case MouseButton.Right:
+                                PerformMouseClick(Constants.MOUSEEVENTF_RIGHTDOWN, Constants.MOUSEEVENTF_RIGHTUP, GetSecondSelectedXPosition(), GetSecondSelectedYPosition());
+                                break;
+                            case MouseButton.Middle:
+                                PerformMouseClick(Constants.MOUSEEVENTF_MIDDLEDOWN, Constants.MOUSEEVENTF_MIDDLEUP, GetSecondSelectedXPosition(), GetSecondSelectedYPosition());
+                                break;
+                        }
+                        switcher = false;
+                    }
                 }
+                else
+                {
+                    switch (AutoClickerSettings.SelectedMouseButton)
+                    {
+                        case MouseButton.Left:
+                            PerformMouseClick(Constants.MOUSEEVENTF_LEFTDOWN, Constants.MOUSEEVENTF_LEFTUP, GetSelectedXPosition(), GetSelectedYPosition());
+                            break;
+                        case MouseButton.Right:
+                            PerformMouseClick(Constants.MOUSEEVENTF_RIGHTDOWN, Constants.MOUSEEVENTF_RIGHTUP, GetSelectedXPosition(), GetSelectedYPosition());
+                            break;
+                        case MouseButton.Middle:
+                            PerformMouseClick(Constants.MOUSEEVENTF_MIDDLEDOWN, Constants.MOUSEEVENTF_MIDDLEUP, GetSelectedXPosition(), GetSelectedYPosition());
+                            break;
+                    }
+                }
+
             });
         }
 
         private void PerformMouseClick(int mouseDownAction, int mouseUpAction, int xPos, int yPos)
         {
-            for (int i = 0; i < GetNumberOfMouseActions(); ++i)
+            if (!AlternatingClicks)
             {
-                var setCursorPos = User32ApiUtils.SetCursorPosition(xPos, yPos);
-                if (!setCursorPos)
+                for (int i = 0; i < GetNumberOfMouseActions(); ++i)
                 {
-                    Log.Error($"Could not set the mouse cursor.");
-                }
+                    var setCursorPos = User32ApiUtils.SetCursorPosition(xPos, yPos);
+                    if (!setCursorPos)
+                    {
+                        Log.Error($"Could not set the mouse cursor.");
+                    }
 
-                User32ApiUtils.ExecuteMouseEvent(mouseDownAction | mouseUpAction, xPos, yPos, 0, 0);
+                    User32ApiUtils.ExecuteMouseEvent(mouseDownAction | mouseUpAction, xPos, yPos, 0, 0);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < GetNumberOfMouseActions(); ++i)
+                {
+                    var setCursorPos = User32ApiUtils.SetCursorPosition(xPos, yPos);
+                    if (!setCursorPos)
+                    {
+                        Log.Error($"Could not set the mouse cursor.");
+                    }
+
+                    User32ApiUtils.ExecuteMouseEvent(mouseDownAction | mouseUpAction, xPos, yPos, 0, 0);
+                }
             }
         }
 
@@ -476,6 +586,13 @@ namespace AutoClicker.Views
         {
             CheckBox checkbox = (CheckBox)sender;
             Topmost = checkbox.IsChecked.Value;
+        }
+        private void AlternatingClicksCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkbox = (CheckBox)sender;
+            AlternatingClicks = checkbox.IsChecked.Value;
+            Log.Information("AlternatingClicks Changes");
+            switcher = false;
         }
     }
 }

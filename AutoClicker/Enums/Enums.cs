@@ -38,4 +38,11 @@
         Hide = 1,
         Exit = 2
     }
+
+    public enum AlternatingClicks
+    {
+        Off = 0,
+        On = 1,
+
+    }
 }

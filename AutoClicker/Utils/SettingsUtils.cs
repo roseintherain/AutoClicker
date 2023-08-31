@@ -94,6 +94,9 @@ namespace AutoClicker.Utils
             CurrentSettings.AutoClickerSettings.PickedXValue = settings.PickedXValue;
             CurrentSettings.AutoClickerSettings.PickedYValue = settings.PickedYValue;
 
+            CurrentSettings.AutoClickerSettings.SecondPickedXValue = settings.SecondPickedXValue;
+            CurrentSettings.AutoClickerSettings.SecondPickedYValue = settings.SecondPickedYValue;
+
             CurrentSettings.AutoClickerSettings.SelectedLocationMode = settings.SelectedLocationMode;
             CurrentSettings.AutoClickerSettings.SelectedMouseAction = settings.SelectedMouseAction;
             CurrentSettings.AutoClickerSettings.SelectedMouseButton = settings.SelectedMouseButton;

@@ -6,13 +6,6 @@
         Height="150" Width="250"
         Icon="{StaticResource AboutIcon}">
     <DockPanel>
-        <TextBlock VerticalAlignment="Center" TextAlignment="Center">
-            <Run Name="AboutInformationText"/>
-            <LineBreak/>
-            <Run Name="AuthorText" Text="Created by Ori Ashual"/>
-            <LineBreak/>
-            <LineBreak/>
-            <Hyperlink Name="UrlHyperlink" RequestNavigate="Hyperlink_RequestNavigate" ToolTip="GitHub"/>
-        </TextBlock>
+        <TextBlock VerticalAlignment="Center" TextAlignment="Center"><Run x:Name="AboutInformationText"/><LineBreak/><Run x:Name="AuthorText" Text="Created by Chris"/><LineBreak/><LineBreak/></TextBlock>
     </DockPanel>
 </Window>
