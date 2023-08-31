@@ -125,9 +125,9 @@
             </GroupBox>
 
             <GroupBox x:Name="clickPositionGroupBox"
-                      Header="Click Position" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,0,28">
+                      Header="Click Position" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,0,55" BorderThickness="1,1,1,1" Grid.RowSpan="2">
                 <Grid x:Name="clickPositionInnerGrid"
-                      HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0">
+                      HorizontalAlignment="Center" VerticalAlignment="Center" Height="72">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -143,8 +143,23 @@
                                  Content="Current Cursor Position"
                                  IsChecked="{Binding AutoClickerSettings.SelectedLocationMode, ConverterParameter={x:Static enums:LocationMode.CurrentLocation}, Converter={StaticResource EnumToBooleanConverter}}"/>
                     <RadioButton GroupName="SelectedLocationMode"
+                        x:Name="RadioButtonSelectedLocationMode_PickedLocation_Copy"
+                        Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 0, 0, 5"
+                        IsChecked="{Binding AutoClickerSettings.SelectedLocationMode, ConverterParameter={x:Static enums:LocationMode.PickedLocation}, Converter={StaticResource EnumToBooleanConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="X" Margin="5, 0, 0, 0"/>
+                            <TextBox Width="50" Margin="5, 0, 0, 5"
+                                x:Name="TextBoxSecondPickedXValue"
+                                Text="{Binding AutoClickerSettings.SecondPickedXValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Y" Margin="5, 0, 0, 0"/>
+                            <TextBox Width="50" Margin="5, 0, 0, 5"
+                                x:Name="TextBoxSecondPickedYValue"
+                                Text="{Binding AutoClickerSettings.SecondPickedYValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton GroupName="SelectedLocationMode"
                                  x:Name="RadioButtonSelectedLocationMode_PickedLocation"
-                                 Grid.Row="1" Grid.ColumnSpan="2" Margin="0,39,0,-33"
+                                 Grid.Row="1" Grid.ColumnSpan="2" Margin="0,28,0,-22"
                                  IsChecked="{Binding AutoClickerSettings.SelectedLocationMode, ConverterParameter={x:Static enums:LocationMode.PickedLocation}, Converter={StaticResource EnumToBooleanConverter}}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="X" Margin="5, 0, 0, 0"/>
@@ -161,21 +176,6 @@
                                     Command="commands:MainWindowCommands.CaptureMouseScreenCoordinates">
                                 <Image Source="../Resources/Icons/location-crosshairs-solid.ico"/>
                             </Button>
-                        </StackPanel>
-                    </RadioButton>
-                    <RadioButton GroupName="SelectedLocationMode"
-                        x:Name="RadioButtonSelectedLocationMode_PickedLocation_Copy"
-                        Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 0, 0, 5"
-                        IsChecked="{Binding AutoClickerSettings.SelectedLocationMode, ConverterParameter={x:Static enums:LocationMode.PickedLocation}, Converter={StaticResource EnumToBooleanConverter}}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="X" Margin="5, 0, 0, 0"/>
-                            <TextBox Width="50" Margin="5, 0, 0, 5"
-                                x:Name="TextBoxSecondPickedXValue"
-                                Text="{Binding AutoClickerSettings.SecondPickedXValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="Y" Margin="5, 0, 0, 0"/>
-                            <TextBox Width="50" Margin="5, 0, 0, 5"
-                                x:Name="TextBoxSecondPickedYValue"
-                                Text="{Binding AutoClickerSettings.SecondPickedYValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </RadioButton>
                 </Grid>
